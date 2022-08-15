@@ -4,7 +4,7 @@ default: build lint
 
 build:
 	@ go build -a \
-			 -o "./tor"
+			 -o "./tor" "./domain/"
 	@ echo "Build done 🛠"
 
 test:
