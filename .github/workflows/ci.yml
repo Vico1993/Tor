@@ -74,7 +74,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Ensure Tor compiles
-              run: go build -a -o "./tor"
+              run: go build -a -o "./tor" "./domain/"
 
     coverage:
         runs-on: ubuntu-latest
