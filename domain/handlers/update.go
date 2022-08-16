@@ -25,10 +25,10 @@ func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 		case "help":
 			msg.Text = "I understand /sayhi and /status."
 		case "off":
-			msg.Text = "Light is coming"
+			msg.Text = "let's go to bed!"
 			hue.SetLight(false)
 		case "on":
-			msg.Text = "let's go to bed!"
+			msg.Text = "Light is coming"
 			hue.SetLight(true)
 		default:
 			msg.Text = "I don't know that command"
