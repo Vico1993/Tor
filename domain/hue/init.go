@@ -50,11 +50,15 @@ func SetLight(on bool) {
 		fmt.Println(grp.ID, grp.Name)
 
 		if (grp.ID == 5) {
-			gg.SetGroupState(grp.ID, lights.State{
+			_, err := gg.SetGroupState(grp.ID, lights.State{
 				On: on,
 				Bri: bri,
 				TransitionTime: 1,
 			})
+
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 }
