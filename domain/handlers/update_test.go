@@ -8,7 +8,7 @@ import (
 )
 
 // TODO: Check test... not working very well
-func TestShouldReactShouldReturnFalseIfUpdateNotMessage(t *testing.T) {
+func TestShouldActShouldReturnTrueIfUpdateNotMessage(t *testing.T) {
 	update := tgbotapi.Update{
 		UpdateID: 1,
 		Message: nil,
@@ -21,10 +21,10 @@ func TestShouldReactShouldReturnFalseIfUpdateNotMessage(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, true, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotAct(update))
 }
 
-func TestShouldReactShouldReturnFalseIfNotGroupMessage(t *testing.T) {
+func TestShouldActShouldReturnTrueIfNotGroupMessage(t *testing.T) {
 	update := tgbotapi.Update{
 		UpdateID: 1,
 		Message: &tgbotapi.Message{
@@ -37,10 +37,10 @@ func TestShouldReactShouldReturnFalseIfNotGroupMessage(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, true, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotAct(update))
 }
 
-func TestShouldReactShouldReturnFalseIfEmptyEntity(t *testing.T) {
+func TestShouldActShouldReturnTrueIfEmptyEntity(t *testing.T) {
 	update := tgbotapi.Update{
 		UpdateID: 1,
 		Message: &tgbotapi.Message{
@@ -54,10 +54,10 @@ func TestShouldReactShouldReturnFalseIfEmptyEntity(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, true, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotAct(update))
 }
 
-func TestShouldReactShouldReturnFalseIfNotGoodTypeOfEntityReceived(t *testing.T) {
+func TestShouldActShouldReturnTrueIfNotGoodTypeOfEntityReceived(t *testing.T) {
 	update := tgbotapi.Update{
 		UpdateID: 1,
 		Message: &tgbotapi.Message{
@@ -75,10 +75,10 @@ func TestShouldReactShouldReturnFalseIfNotGoodTypeOfEntityReceived(t *testing.T)
 		},
 	}
 
-	assert.Equal(t, true, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotAct(update))
 }
 
-// func TestShouldReactShouldReturnTrueIfCorrectMessage(t *testing.T) {
+// func TestShouldActShouldReturnTrueIfCorrectMessage(t *testing.T) {
 // 	update := tgbotapi.Update{
 // 		UpdateID: 1,
 // 		Message: &tgbotapi.Message{
@@ -96,5 +96,5 @@ func TestShouldReactShouldReturnFalseIfNotGoodTypeOfEntityReceived(t *testing.T)
 // 		},
 // 	}
 
-// 	assert.Equal(t, false, shouldReact(update))
+// 	assert.Equal(t, false, ShouldAct(update))
 // }

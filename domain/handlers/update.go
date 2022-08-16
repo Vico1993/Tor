@@ -8,12 +8,12 @@ import (
 // We are checking if the update we receive is a Message
 // From a Group
 // if it's a Command
-func shouldNotReact(update tgbotapi.Update) bool {
+func shouldNotAct(update tgbotapi.Update) bool {
 	return update.FromChat().Type != "group" || update.Message == nil || !update.Message.IsCommand()
 }
 
 func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
-	if shouldNotReact(update) {
+	if shouldNotAct(update) {
 		// TODO: Log this why we don't act upon it
 		return
 	}
