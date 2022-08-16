@@ -21,7 +21,7 @@ func TestShouldReactShouldReturnFalseIfUpdateNotMessage(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, false, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotReact(update))
 }
 
 func TestShouldReactShouldReturnFalseIfNotGroupMessage(t *testing.T) {
@@ -37,7 +37,7 @@ func TestShouldReactShouldReturnFalseIfNotGroupMessage(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, false, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotReact(update))
 }
 
 func TestShouldReactShouldReturnFalseIfEmptyEntity(t *testing.T) {
@@ -54,7 +54,7 @@ func TestShouldReactShouldReturnFalseIfEmptyEntity(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, false, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotReact(update))
 }
 
 func TestShouldReactShouldReturnFalseIfNotGoodTypeOfEntityReceived(t *testing.T) {
@@ -75,7 +75,7 @@ func TestShouldReactShouldReturnFalseIfNotGoodTypeOfEntityReceived(t *testing.T)
 		},
 	}
 
-	assert.Equal(t, false, shouldNotReact(update))
+	assert.Equal(t, true, shouldNotReact(update))
 }
 
 // func TestShouldReactShouldReturnTrueIfCorrectMessage(t *testing.T) {
