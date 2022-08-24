@@ -25,7 +25,7 @@ func handleReply(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 		"I didn't understand...",
 	)
 
-	// Manage the callbacy query
+	// TODO: Find a way to refactor Reply/Send Message into one switch
 	switch tmp[0] {
 		case "off":
 			msg.Text = "Shutting down: " + tmp[1]
