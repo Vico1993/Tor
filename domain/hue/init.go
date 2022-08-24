@@ -2,7 +2,6 @@ package hue
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/heatxsink/go-hue/groups"
 	"github.com/heatxsink/go-hue/lights"
@@ -34,52 +33,70 @@ import (
 	}
 */
 
-func SetLight(on bool) {
-	gg := groups.New(os.Getenv("HUE_TEST_HOSTNAME"), os.Getenv("HUE_TEST_USERNAME"))
-	grps, err := gg.GetAllGroups()
+// Get a group based on a Name
+func FindCorrectGroup(name string) (*groups.Group, error) {
+	groups, err := getGroupClient().GetAllGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, group := range groups {
+		if group.Name == name {
+			return &group, nil
+		}
+	}
+
+	return nil, nil
+}
+
+// Get all Groups for your hue
+func GetAllGroup() ([]groups.Group, error) {
+	groups, err := getGroupClient().GetAllGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}
+
+func ShutDownGroup(name string) {
+	group, err := FindCorrectGroup(name)
 	if err != nil {
 		panic(err)
 	}
 
-	var bri uint8 = 100
-	if !on {
-		bri = 0
-	}
+	fmt.Println("SHUTDOWN")
 
-	for _, grp := range grps {
-		fmt.Println(grp.ID, grp.Name)
+	_, err = getGroupClient().SetGroupState(
+		group.ID,
+		lights.State{
+			On: false,
+			Bri: 0,
+			TransitionTime: 1,
+		},
+	)
 
-		if (grp.ID == 5) {
-			_, err := gg.SetGroupState(grp.ID, lights.State{
-				On: on,
-				Bri: bri,
-				TransitionTime: 1,
-			})
-
-			if err != nil {
-				panic(err)
-			}
-		}
+	if err != nil {
+		panic(err)
 	}
 }
 
-// func ShutDownLight() {
-// 	fmt.Println("Shutting down...")
+func PowerUpGroup(name string) {
+	group, err := FindCorrectGroup(name)
+	if err != nil {
+		panic(err)
+	}
 
-// 	gg := groups.New(os.Getenv("HUE_TEST_HOSTNAME"), os.Getenv("HUE_TEST_USERNAME"))
-// 	grps, err := gg.GetAllGroups()
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	_, err = getGroupClient().SetGroupState(
+		group.ID,
+		lights.State{
+			On: true,
+			Bri: 200,
+			TransitionTime: 1,
+		},
+	)
 
-// 	for _, grp := range grps {
-// 		fmt.Println(grp.ID, grp.Name)
-
-// 		if (grp.ID == 5) {
-// 			gg.SetGroupState(grp.ID, lights.State{
-// 				On: false,
-// 				TransitionTime: 1,
-// 			})
-// 		}
-// 	}
-// }
+	if err != nil {
+		panic(err)
+	}
+}

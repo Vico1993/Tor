@@ -5,11 +5,44 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-// We are checking if the update we receive is a Message
-// From a Group
-// if it's a Command
+// Bot should respond
 func shouldNotAct(update tgbotapi.Update) bool {
-	return update.FromChat().Type != "group" || update.Message == nil || !update.Message.IsCommand()
+	// If it's not a Group chat
+	if update.FromChat().Type != "group" {
+		return false
+	}
+
+	// If it's not a Message or CallBackQuery
+	if update.Message == nil && update.CallbackQuery == nil {
+		return false
+	}
+
+	// If it's a message and not an Command
+	return update.Message != nil && !update.Message.IsCommand()
+}
+
+func listGroup(command string) [][]tgbotapi.InlineKeyboardButton {
+	groups, err := hue.GetAllGroup()
+	if err != nil {
+		panic(err)
+	}
+
+	var buttons [][]tgbotapi.InlineKeyboardButton
+	var line []tgbotapi.InlineKeyboardButton
+	for key, group := range groups {
+		line = append(
+			line,
+			tgbotapi.NewInlineKeyboardButtonData(group.Name, command + " - " + group.Name),
+		)
+
+		if key % 3 == 0 {
+			buttons = append(buttons, line)
+
+			line = nil
+		}
+	}
+
+	return buttons
 }
 
 func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
@@ -18,18 +51,34 @@ func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 		return
 	}
 
+	// Override message with the reply
+	if update.CallbackQuery != nil {
+		handleReply(update, bot)
+		return
+	}
+
 	// Create default message
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "I didn't understand...")
+	msg := tgbotapi.NewMessage(
+		update.Message.Chat.ID,
+		"I didn't understand...",
+	)
 
 	switch update.Message.Command() {
 		case "help":
 			msg.Text = "I understand /sayhi and /status."
 		case "off":
-			msg.Text = "let's go to bed!"
-			hue.SetLight(false)
+			msg.Text = "Which group of light do you want to turn off?"
+
+			msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+				listGroup("off")...
+			)
+
 		case "on":
-			msg.Text = "Light is coming"
-			hue.SetLight(true)
+			msg.Text = "Which group of light do you want to turn on?"
+
+			msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+				listGroup("on")...
+			)
 		default:
 			msg.Text = "I don't know that command"
 	}
