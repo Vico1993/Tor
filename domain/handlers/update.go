@@ -21,30 +21,6 @@ func shouldNotAct(update tgbotapi.Update) bool {
 	return update.Message != nil && !update.Message.IsCommand()
 }
 
-func listGroup(command string) [][]tgbotapi.InlineKeyboardButton {
-	groups, err := hue.GetAllGroup()
-	if err != nil {
-		panic(err)
-	}
-
-	var buttons [][]tgbotapi.InlineKeyboardButton
-	var line []tgbotapi.InlineKeyboardButton
-	for key, group := range groups {
-		line = append(
-			line,
-			tgbotapi.NewInlineKeyboardButtonData(group.Name, command + " - " + group.Name),
-		)
-
-		if key % 3 == 0 {
-			buttons = append(buttons, line)
-
-			line = nil
-		}
-	}
-
-	return buttons
-}
-
 func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 	if shouldNotAct(update) {
 		// TODO: Log this why we don't act upon it
@@ -57,33 +33,56 @@ func HandleUpdate(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 		return
 	}
 
+	botRespond(botParameter{
+		ChatId: update.Message.Chat.ID,
+		Bot: bot,
+		Command: update.Message.Command(),
+		CommandParam: "",
+	})
+}
+
+type botParameter struct {
+	Bot 			*tgbotapi.BotAPI
+	ChatId 			int64
+	Command 		string
+	CommandParam 	string
+}
+
+func botRespond(params botParameter) {
 	// Create default message
 	msg := tgbotapi.NewMessage(
-		update.Message.Chat.ID,
+		params.ChatId,
 		"I didn't understand...",
 	)
 
-	switch update.Message.Command() {
+	switch params.Command {
 		case "help":
-			msg.Text = "I understand /sayhi and /status."
+			msg.Text = "I understand /off and /on."
 		case "off":
-			msg.Text = "Which group of light do you want to turn off?"
-
-			msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-				listGroup("off")...
-			)
-
+			if params.CommandParam != "" {
+				msg.Text = "Shutting down: " + params.CommandParam
+				hue.ShutDownGroup(params.CommandParam)
+			} else {
+				msg.Text = "Which group of light do you want to turn off?"
+				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+					hue.BuildListGroup("off")...
+				)
+			}
 		case "on":
-			msg.Text = "Which group of light do you want to turn on?"
-
-			msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-				listGroup("on")...
-			)
+			if params.CommandParam != "" {
+				msg.Text = "Powering up: " + params.CommandParam
+				hue.PowerUpGroup(params.CommandParam)
+			} else {
+				msg.Text = "Which group of light do you want to turn on?"
+				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+					hue.BuildListGroup("on")...
+				)
+			}
 		default:
 			msg.Text = "I don't know that command"
 	}
 
-	if _, err := bot.Send(msg); err != nil {
+	if _, err := params.Bot.Send(msg); err != nil {
 		panic(err)
 	}
 }

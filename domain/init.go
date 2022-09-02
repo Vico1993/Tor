@@ -9,6 +9,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// TODO: Handle Errors
+
 func main() {
 	// load .env file
 	err := godotenv.Load(".env")

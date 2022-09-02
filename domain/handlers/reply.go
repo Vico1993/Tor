@@ -3,7 +3,6 @@ package handlers
 import (
 	"strings"
 
-	"github.com/Vico1993/Tor/domain/hue"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -19,23 +18,11 @@ func handleReply(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 
 	tmp := strings.Split(update.CallbackQuery.Data, " - ")
 
-	// Create default message
-	msg := tgbotapi.NewMessage(
-		update.CallbackQuery.Message.Chat.ID,
-		"I didn't understand...",
-	)
 
-	// TODO: Find a way to refactor Reply/Send Message into one switch
-	switch tmp[0] {
-		case "off":
-			msg.Text = "Shutting down: " + tmp[1]
-			hue.ShutDownGroup(tmp[1])
-		case "on":
-			msg.Text = "Powering up: " + tmp[1]
-			hue.PowerUpGroup(tmp[1])
-	}
-
-	if _, err := bot.Send(msg); err != nil {
-		panic(err)
-	}
+	botRespond(botParameter{
+		ChatId: update.CallbackQuery.Message.Chat.ID,
+		Bot: bot,
+		Command: tmp[0],
+		CommandParam: tmp[1],
+	})
 }
