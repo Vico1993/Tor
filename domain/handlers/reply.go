@@ -18,7 +18,6 @@ func handleReply(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 
 	tmp := strings.Split(update.CallbackQuery.Data, " - ")
 
-
 	botRespond(botParameter{
 		ChatId: update.CallbackQuery.Message.Chat.ID,
 		Bot: bot,
