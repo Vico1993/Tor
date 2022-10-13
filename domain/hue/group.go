@@ -20,7 +20,6 @@ func BuildListGroup(command string) [][]tgbotapi.InlineKeyboardButton {
 			continue
 		}
 
-
 		line = append(
 			line,
 			tgbotapi.NewInlineKeyboardButtonData(group.Name, command + " - " + group.Name),
@@ -31,6 +30,10 @@ func BuildListGroup(command string) [][]tgbotapi.InlineKeyboardButton {
 
 			line = nil
 		}
+	}
+
+	if line != nil {
+		buttons = append(buttons, line)
 	}
 
 	return buttons
