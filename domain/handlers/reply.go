@@ -6,7 +6,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func handleReply(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
+func buildReplyContext(update tgbotapi.Update, bot *tgbotapi.BotAPI) handlerContext {
 	callback := tgbotapi.NewCallback(
 		update.CallbackQuery.ID,
 		update.CallbackQuery.Data,
@@ -18,10 +18,9 @@ func handleReply(update tgbotapi.Update, bot *tgbotapi.BotAPI) {
 
 	tmp := strings.Split(update.CallbackQuery.Data, " - ")
 
-	botRespond(botParameter{
+	return handlerContext{
 		ChatId: update.CallbackQuery.Message.Chat.ID,
-		Bot: bot,
 		Command: tmp[0],
 		CommandParam: tmp[1],
-	})
+	}
 }

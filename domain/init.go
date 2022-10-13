@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/Vico1993/Tor/domain/commands"
 	"github.com/Vico1993/Tor/domain/handlers"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
@@ -32,7 +33,10 @@ func main() {
     // Start polling Telegram for updates.
     updates := bot.GetUpdatesChan(updateConfig)
 
+	// Initiate the list of command
+	commands.InitCmd()
+
 	for update := range updates {
-		handlers.HandleUpdate(update, bot)
+		handlers.HandleEvent(update, bot)
 	}
 }
