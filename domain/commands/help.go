@@ -21,3 +21,7 @@ func (cmd *helpCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) erro
 
 	return nil
 }
+
+func (cmd *helpCmd) Command() string {
+	return cmd.baseCmd.Command
+}

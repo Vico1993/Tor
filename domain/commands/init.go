@@ -29,7 +29,9 @@ func InitCmd() {
 		baseCmd{
 			Command: "on",
 		},
+	}, &helpCmd{
+		baseCmd{
+			Command: "help",
+		},
 	})
-
-	// help
 }
