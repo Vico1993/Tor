@@ -96,3 +96,29 @@ func PowerUpGroup(name string) {
 		panic(err)
 	}
 }
+
+// Get a group based on a Name
+func findCorrectGroup(name string) (*groups.Group, error) {
+	groups, err := getGroupClient().GetAllGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, group := range groups {
+		if group.Name == name {
+			return &group, nil
+		}
+	}
+
+	return nil, nil
+}
+
+// Get all Groups for your hue
+func getAllGroup() ([]groups.Group, error) {
+	groups, err := getGroupClient().GetAllGroups()
+	if err != nil {
+		return nil, err
+	}
+
+	return groups, nil
+}
