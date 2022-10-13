@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/Vico1993/Tor/domain/hue"
+	"github.com/Vico1993/Tor/domain/util"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -48,7 +49,7 @@ func InitCmd() {
 		CmdList = append(CmdList, &groupCmd{
 			group: grp,
 			baseCmd: baseCmd{
-				Command: grp.Name,
+				Command: util.ToCamelCase(grp.Name),
 			},
 		})
 	}

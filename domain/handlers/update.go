@@ -15,6 +15,6 @@ func buildUpdateContext(update tgbotapi.Update, bot *tgbotapi.BotAPI) handlerCon
 	return handlerContext{
 		ChatId: update.Message.Chat.ID,
 		Command: update.Message.Command(),
-		CommandParam: "",
+		CommandParam: update.Message.CommandArguments(),
 	}
 }
