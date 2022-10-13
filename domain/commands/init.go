@@ -1,8 +1,9 @@
 package commands
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-
-// type CmdParams struct {}
+import (
+	"github.com/Vico1993/Tor/domain/hue"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+)
 
 type Cmd interface {
 	// Hack found to be able to get the command name
@@ -20,18 +21,35 @@ var CmdList []Cmd
 // Initialise the Command
 // For now keep it hardcoded... find a better way later
 func InitCmd() {
-	// off
-	CmdList = append(CmdList, &offCmd{
-		baseCmd{
-			Command: "off",
+	CmdList = []Cmd{
+		&offCmd{
+			baseCmd{
+				Command: "off",
+			},
 		},
-	}, &onCmd{
-		baseCmd{
-			Command: "on",
+		&onCmd{
+			baseCmd{
+				Command: "on",
+			},
+		}, &helpCmd{
+			baseCmd{
+				Command: "help",
+			},
 		},
-	}, &helpCmd{
-		baseCmd{
-			Command: "help",
-		},
-	})
+	}
+
+	// Build dynamic command
+	groups, err := hue.GetAllGroup()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, grp := range groups {
+		CmdList = append(CmdList, &groupCmd{
+			group: grp,
+			baseCmd: baseCmd{
+				Command: grp.Name,
+			},
+		})
+	}
 }

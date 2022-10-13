@@ -22,7 +22,7 @@ func (cmd *onCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error 
 		)
 	} else {
 		msg.Text = "Powering up: " + params
-		hue.ShutDownGroup(params)
+		hue.PowerUpGroup(params)
 	}
 
 	if _, err := bot.Send(msg); err != nil {

@@ -1,7 +1,6 @@
 package hue
 
 import (
-	"fmt"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -21,7 +20,7 @@ func IsAGroup(name string) *groups.Group {
 
 // Get a list of quick replies with the correct list of groups
 func BuildListGroup(command string) [][]tgbotapi.InlineKeyboardButton {
-	groups, err := getAllGroup()
+	groups, err := GetAllGroup()
 	if err != nil {
 		panic(err)
 	}
@@ -59,8 +58,6 @@ func ShutDownGroup(name string) {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("SHUTDOWN")
 
 	_, err = getGroupClient().SetGroupState(
 		group.ID,
@@ -114,7 +111,7 @@ func findCorrectGroup(name string) (*groups.Group, error) {
 }
 
 // Get all Groups for your hue
-func getAllGroup() ([]groups.Group, error) {
+func GetAllGroup() ([]groups.Group, error) {
 	groups, err := getGroupClient().GetAllGroups()
 	if err != nil {
 		return nil, err
