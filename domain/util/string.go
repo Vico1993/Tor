@@ -1,13 +1,18 @@
 package util
 
-import "strings"
+import (
+	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+)
 
 func ToCamelCase(str string) string {
 	words := strings.Split(str, " ")
-	key := strings.ToLower(words[0])
+	key := words[0]
 
 	for _, word := range words[1:] {
-		key += strings.Title(word)
+		key += cases.Title(language.English, cases.NoLower).String(word)
 	}
 
 	return key
