@@ -9,7 +9,7 @@ import (
 
 type groupCmd struct {
 	baseCmd
-	group    groups.Group
+	group groups.Group
 }
 
 func (cmd *groupCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error {
@@ -21,4 +21,8 @@ func (cmd *groupCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) err
 
 func (cmd *groupCmd) Command() string {
 	return cmd.baseCmd.Command
+}
+
+func (cmd *groupCmd) Description() string {
+	return cmd.baseCmd.Description
 }

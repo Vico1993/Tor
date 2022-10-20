@@ -9,11 +9,13 @@ import (
 type Cmd interface {
 	// Hack found to be able to get the command name
 	Command() string
+	Description() string
 	Exec(Bot *tgbotapi.BotAPI, ChatId int64, params string) error
 }
 
 type baseCmd struct {
-	Command	string
+	Command     string
+	Description string
 }
 
 // Return the list of Command
@@ -25,16 +27,19 @@ func InitCmd() {
 	CmdList = []Cmd{
 		&offCmd{
 			baseCmd{
-				Command: "off",
+				Command:     "off",
+				Description: "Shuting down a group of light",
 			},
 		},
 		&onCmd{
 			baseCmd{
-				Command: "on",
+				Command:     "on",
+				Description: "Turn on a group of light",
 			},
 		}, &helpCmd{
 			baseCmd{
-				Command: "help",
+				Command:     "help",
+				Description: "List of all the commands I can do to help",
 			},
 		},
 	}
@@ -49,7 +54,8 @@ func InitCmd() {
 		CmdList = append(CmdList, &groupCmd{
 			group: grp,
 			baseCmd: baseCmd{
-				Command: util.ToCamelCase(grp.Name),
+				Command:     util.ToCamelCase(grp.Name),
+				Description: "Managing scene for " + grp.Name,
 			},
 		})
 	}

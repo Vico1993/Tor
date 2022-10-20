@@ -18,7 +18,7 @@ func (cmd *offCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error
 
 	if params == "" {
 		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-			hue.BuildListGroup("off")...
+			hue.BuildListGroup("off")...,
 		)
 	} else {
 		msg.Text = "Shutting down: " + params
@@ -34,4 +34,8 @@ func (cmd *offCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error
 
 func (cmd *offCmd) Command() string {
 	return cmd.baseCmd.Command
+}
+
+func (cmd *offCmd) Description() string {
+	return cmd.baseCmd.Description
 }

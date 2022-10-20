@@ -18,7 +18,7 @@ func (cmd *onCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error 
 
 	if params == "" {
 		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-			hue.BuildListGroup("on")...
+			hue.BuildListGroup("on")...,
 		)
 	} else {
 		msg.Text = "Powering up: " + params
@@ -34,4 +34,8 @@ func (cmd *onCmd) Exec(bot *tgbotapi.BotAPI, chatId int64, params string) error 
 
 func (cmd *onCmd) Command() string {
 	return cmd.baseCmd.Command
+}
+
+func (cmd *onCmd) Description() string {
+	return cmd.baseCmd.Description
 }
