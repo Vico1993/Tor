@@ -28,17 +28,12 @@ func BuildListGroup(command string) [][]tgbotapi.InlineKeyboardButton {
 	var line []tgbotapi.InlineKeyboardButton
 	var buttons [][]tgbotapi.InlineKeyboardButton
 	for key, group := range groups {
-		// Exclude custom Groups... where it's not a group
-		if (strings.Contains(group.Name, "Custom group")) {
-			continue
-		}
-
 		line = append(
 			line,
-			tgbotapi.NewInlineKeyboardButtonData(group.Name, command + " - " + group.Name),
+			tgbotapi.NewInlineKeyboardButtonData(group.Name, command+" - "+group.Name),
 		)
 
-		if key % 3 == 0 {
+		if key%3 == 0 {
 			buttons = append(buttons, line)
 
 			line = nil
@@ -62,8 +57,8 @@ func ShutDownGroup(name string) {
 	_, err = getGroupClient().SetGroupState(
 		group.ID,
 		lights.State{
-			On: false,
-			Bri: 0,
+			On:             false,
+			Bri:            0,
 			TransitionTime: 1,
 		},
 	)
@@ -83,8 +78,8 @@ func PowerUpGroup(name string) {
 	_, err = getGroupClient().SetGroupState(
 		group.ID,
 		lights.State{
-			On: true,
-			Bri: 200,
+			On:             true,
+			Bri:            200,
 			TransitionTime: 1,
 		},
 	)
@@ -115,6 +110,16 @@ func GetAllGroup() ([]groups.Group, error) {
 	groups, err := getGroupClient().GetAllGroups()
 	if err != nil {
 		return nil, err
+	}
+
+	for key, group := range groups {
+		// Exclude custom Groups... where it's not a group
+		if strings.Contains(group.Name, "Custom group") {
+			groups[key] = groups[len(groups)-1]
+			groups = groups[:len(groups)-1]
+
+			break
+		}
 	}
 
 	return groups, nil
