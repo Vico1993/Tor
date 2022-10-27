@@ -1,10 +1,9 @@
 name: release
 
 on:
-    push:
-        tags:
-            - "v*"
-    pull_request:
+    release:
+        types:
+            - released
 
 permissions:
     contents: write
