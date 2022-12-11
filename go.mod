@@ -7,7 +7,7 @@ require (
 	github.com/heatxsink/go-hue v0.0.0-20201117220325-b335d8f4e5ac
 	github.com/joho/godotenv v1.4.0
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/text v0.4.0
+	golang.org/x/text v0.5.0
 )
 
 require (
