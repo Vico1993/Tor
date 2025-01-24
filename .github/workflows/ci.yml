@@ -28,7 +28,7 @@ jobs:
                   go-version: 1.18
 
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Test
               run: go test -race -v ./...
@@ -51,7 +51,7 @@ jobs:
                   go-version: 1.18
 
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Lint
               uses: golangci/golangci-lint-action@v3
@@ -71,7 +71,7 @@ jobs:
                   go-version: 1.18
 
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Ensure Tor compiles
               run: go build -a -o "./tor" "./domain/"
@@ -88,7 +88,7 @@ jobs:
                   go-version: ^1
 
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
             - name: Coverage
               env:
